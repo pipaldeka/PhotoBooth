@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>snapr • online photobooth</title>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Special+Elite&family=Courier+Prime&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════ LANDING ═══════════════════════════════════ -->
+  <div id="landing" class="page">
+    <div class="landing-title">snap<span>r</span></div>
+    <div class="landing-subtitle">online photobooth • free • instant</div>
+
+    <div class="booth-illustration">
+      <svg viewBox="0 0 200 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="20" y="30" width="160" height="200" rx="4" stroke="#1a1a1a" stroke-width="3" fill="white"/>
+        <rect x="35" y="10" width="130" height="28" rx="2" stroke="#1a1a1a" stroke-width="2.5" fill="#f5f0e8"/>
+        <text x="100" y="28" text-anchor="middle" font-family="'Special Elite', monospace" font-size="11" fill="#1a1a1a" letter-spacing="3">PHOTOBOOTH</text>
+        <path d="M20 30 Q40 60 20 90" stroke="#1a1a1a" stroke-width="2" fill="#e8ddd0"/>
+        <path d="M180 30 Q160 60 180 90" stroke="#1a1a1a" stroke-width="2" fill="#e8ddd0"/>
+        <circle cx="100" cy="85" r="18" stroke="#1a1a1a" stroke-width="2.5" fill="#f5f0e8"/>
+        <circle cx="100" cy="85" r="11" stroke="#1a1a1a" stroke-width="2" fill="#ddd"/>
+        <circle cx="100" cy="85" r="5" fill="#1a1a1a"/>
+        <circle cx="103" cy="82" r="2" fill="white" opacity="0.6"/>
+        <rect x="78" y="64" width="8" height="5" rx="1" stroke="#1a1a1a" stroke-width="1.5" fill="white"/>
+        <ellipse cx="100" cy="210" rx="30" ry="6" stroke="#1a1a1a" stroke-width="2" fill="#e8ddd0"/>
+        <line x1="100" y1="216" x2="100" y2="240" stroke="#1a1a1a" stroke-width="2.5"/>
+        <ellipse cx="100" cy="240" rx="18" ry="4" stroke="#1a1a1a" stroke-width="2" fill="#e8ddd0"/>
+        <rect x="60" y="155" width="40" height="60" rx="2" stroke="#1a1a1a" stroke-width="2" fill="#f5f0e8"/>
+        <rect x="63" y="158" width="34" height="12" fill="#ddd" rx="1"/>
+        <rect x="63" y="173" width="34" height="12" fill="#ddd" rx="1"/>
+        <rect x="63" y="188" width="34" height="12" fill="#ddd" rx="1"/>
+        <rect x="63" y="203" width="34" height="7" fill="#ddd" rx="1"/>
+        <rect x="110" y="160" width="52" height="36" rx="2" stroke="#1a1a1a" stroke-width="2" fill="white"/>
+        <text x="136" y="172" text-anchor="middle" font-family="'Courier Prime', monospace" font-size="6.5" fill="#1a1a1a">PHOTOS</text>
+        <text x="136" y="181" text-anchor="middle" font-family="'Courier Prime', monospace" font-size="6.5" fill="#1a1a1a">DELIVERED</text>
+        <text x="136" y="190" text-anchor="middle" font-family="'Courier Prime', monospace" font-size="6.5" fill="#1a1a1a">IN 0 SECS</text>
+      </svg>
+      <div class="badge">$0<br>=<br>4 pics</div>
+    </div>
+
+    <button class="enter-btn" onclick="enterBooth()">enter →</button>
+    <div class="footer-note">made with ♥ • no sign-up needed</div>
+  </div>
+
+  <!-- ═══════════════════════════════════ BOOTH ════════════════════════════════════ -->
+  <div id="booth" class="page" style="display:none;">
+    <div class="booth-header">
+      <h1>📷 PHOTOBOOTH</h1>
+    </div>
+
+    <div class="booth-layout">
+
+      <!-- Camera -->
+      <div class="camera-section">
+        <div class="camera-wrapper">
+          <div class="eye-level-label">eye level</div>
+          <div class="camera-frame" id="camera-frame">
+            <video id="video" autoplay playsinline></video>
+            <canvas id="snapshot-canvas"></canvas>
+            <div class="countdown-overlay" id="countdown-overlay">
+              <div class="countdown-number" id="countdown-number">3</div>
+            </div>
+            <div class="flash-overlay" id="flash-overlay"></div>
+            <div class="corner-tl"></div>
+            <div class="corner-tr"></div>
+            <div class="corner-bl"></div>
+            <div class="corner-br"></div>
+          </div>
+        </div>
+
+        <div class="controls">
+          <div class="filter-pills">
+            <button class="filter-pill active" id="pill-color"  onclick="setFilter('color')">color</button>
+            <button class="filter-pill"        id="pill-bw"     onclick="setFilter('bw')">b&amp;w</button>
+            <button class="filter-pill"        id="pill-vintage" onclick="setFilter('vintage')">vintage</button>
+          </div>
+          <button class="start-btn" id="start-btn" onclick="startSession()">start →</button>
+          <div class="photo-counter" id="photo-counter"></div>
+        </div>
+
+        <div class="instructions">
+          <div class="step"><span class="step-num">1</span><span>Pick a filter — color, b&w, or vintage</span></div>
+          <div class="step"><span class="step-num">2</span><span>Hit <b>start</b> — 4 shots with countdown</span></div>
+          <div class="step"><span class="step-num">3</span><span>Download your strip instantly!</span></div>
+        </div>
+      </div>
+
+      <!-- Strip preview -->
+      <div class="strip-section">
+        <div class="strip-frame" id="strip-frame">
+          <div class="strip-slot" id="slot-0"><span class="slot-empty-icon">○</span></div>
+          <div class="strip-slot" id="slot-1"><span class="slot-empty-icon">○</span></div>
+          <div class="strip-slot" id="slot-2"><span class="slot-empty-icon">○</span></div>
+          <div class="strip-slot" id="slot-3"><span class="slot-empty-icon">○</span></div>
+          <div class="delivered-badge">PHOTOS DELIVERED<br>IN 0 SECONDS</div>
+        </div>
+        <div class="strip-label">your strip</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════ RESULT ═══════════════════════════════════ -->
+  <div id="result" class="page" style="display:none;">
+    <div class="result-title">✨ your strip is ready!</div>
+
+    <div class="final-strip-wrapper">
+      <div id="final-strip">
+        <!-- photos injected by JS -->
+        <div class="strip-date" id="strip-date"></div>
+      </div>
+    </div>
+
+    <div class="result-actions">
+      <button class="action-btn primary"   onclick="downloadStrip()">↓ download</button>
+      <button class="action-btn secondary" onclick="retake()">↺ retake</button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
